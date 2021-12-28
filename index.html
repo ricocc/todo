@@ -101,10 +101,10 @@
                         </li>
                 </ul>
                 <ul class="todo-func-list batch">
-                    <li v-if="todos.length || recycleBin.length">批量操作：</li>
+                    <li v-if="todos.length">批量操作：</li>
                     <li v-if="leftTodosCount"> <input type="button" class="btn-small" v-if="leftTodosCount" value="全部标为已完成" @click="markAllAsCompleted"> </li>
                     <li v-if="completedTodosCount">  <input type="button" value="清除已完成"  class="btn-small"  v-if="completedTodosCount" @click="clearCompleted"></li>
-                    <li v-if="todos.length || recycleBin.length"><input type="button"  class="btn-small"  value="清除全部" @click="clearAll"> </li>
+                    <li v-if="todos.length"><input type="button"  class="btn-small"  value="清除全部" @click="clearAll"> </li>
                 </ul>
 
             </div>
