@@ -26,7 +26,7 @@
                 <h1>TODO LIST</h1>
                 <div class="add-content-wrapper">
                 <input  type="text" rows="3" class="add-content"  placeholder="新增待办事项..." v-model="newTodoTitle" @keyup.enter="addTodo"
-                    v-bind:class='{empty:emptyChecked}' />
+                    :class='{empty:emptyChecked}' />
                     <transition name="tips" >
                         <div class="tips" v-if='emptyChecked' style="color:red">💡请输入内容！</div>
                     </transition>
@@ -45,8 +45,18 @@
                         😄😄 今日事，今日毕!!
                     </div>
                 </div>
-                <ul class="todo-list">
-                        <li v-for='todo in filteredTodos' :key='todo.id' class='todo-item animate__animated'>          
+                <transition-group
+                name="drag"
+                class="todo-list"
+                tag="ul"
+                mode="in-out"
+                >
+                        <li v-for='(todo, index) in filteredTodos' :key='todo.id' class='todo-item'       
+                        @dragenter="dragenter($event, index)"
+                        @dragover="dragover($event, index)"
+                        @dragstart="dragstart(index)"
+                        draggable
+                        >          
                             <div class="todo-content" :class='{completed:todo.completed}' @dblclick="editdTodo(todo)">{{todo.title}}</div>
                             <!-- 标记完成 -->
                             <div class="todo-btn btn-finish" v-if="!todo.completed"  @click="markAsCompleted(todo)"></div>
@@ -66,7 +76,7 @@
                             <input type="text" class="edit-todo" value="编辑 Todo..." v-if="editedTodo !== null && editedTodo.id === todo.id"
                                 v-model="todo.title" v-focus="true" @keyup.enter="editDone(todo)" @keyup.esc="cancelEdit(todo)" />
                         </li>
-                </ul>
+                </transition-group>
 
                 <!-- <div class="bar-message bar-bottom">
                     <div class="bar-message-text">
@@ -83,9 +93,9 @@
             <div class="todo-footer-box">
                 <ul class="todo-func-list filter">
                         <li v-if="todos.length || recycleBin.length">筛选：</li>
-                        <li v-if="hasRemovedTodo" ><input type="button" value="撤销" v-if="hasRemovedTodo" @click="restoreTodo()"></li>
+                        <!-- <li v-if="hasRemovedTodo" ><input type="button" value="撤销" v-if="hasRemovedTodo" @click="restoreTodo()"></li> -->
                         <li v-if="todos.length || recycleBin.length"> <input class="btn-small action-showAll" type="button" value="全部" :class="{selected: intention === 'all'}" @click="intention ='all'"></li>
-                        <li  v-if="leftTodosCount" ><input class="btn-small action-progress" type="button" value="进行中" v-if="leftTodosCount" :class="{selected: intention === 'ongoing'}"
+                        <li  v-if="completedTodosCount" ><input class="btn-small action-progress" type="button" value="进行中" v-if="leftTodosCount" :class="{selected: intention === 'ongoing'}"
                         @click="intention ='ongoing'"></li>
                         <li v-if="completedTodosCount">
                             <input class="btn-small action-completed" type="button" value="已完成" v-if="completedTodosCount"
@@ -168,6 +178,8 @@
                     intention: 'all', //默认为 all
                     checkEmpty: false,
                     recycleBin:[],
+                    dragIndex: '',
+                    enterIndex: '',
                 }
             },
             // 监测 todos 列表的变化，将变化存储到 local storage
@@ -180,6 +192,9 @@
                 }
             },
             methods: {
+                shuffle: function () {
+                this.filteredTodos = _.shuffle(this.filteredTodos);
+                },
                 addTodo: function () {
                     if (this.newTodoTitle === '') {
                         this.checkEmpty = true;
@@ -202,6 +217,9 @@
                     todo.completed = false
                 },
                 markAllAsCompleted: function () {
+                    if(!confirm('确认全部待办事项都已完成?')){
+                        return
+                    }
                     this.todos.map(function (todo) {
                         if (!todo.completed) {
                             todo.completed = true
@@ -252,8 +270,25 @@
                     this.todos.map(todo=>todo.removed =true);
                     this.recycleBin.unshift(...this.todos);
                     this.todos = []
-                }
-
+                },
+                //拖拽 ------------------
+                dragstart: function (index) {
+                    this.dragIndex = index;
+                    },
+                dragenter: function (e, index) {
+                    e.preventDefault();
+                    // 避免源对象触发自身的dragenter事件
+                    if (this.dragIndex !== index) {
+                        const source = this.filteredTodos[this.dragIndex];
+                        this.filteredTodos.splice(this.dragIndex, 1);
+                        this.filteredTodos.splice(index, 0, source);
+                        // 排序变化后目标对象的索引变成源对象的索引
+                        this.dragIndex = index;
+                    }
+                    },
+                dragover: function (e, index) {
+                    e.preventDefault();
+                },
             },
             directives: {
                 focus: {
