@@ -50,11 +50,19 @@
                 class="todo-list"
                 tag="ul"
                 mode="in-out"
+                @before-enter="beforeEnter"
+                @enter="enter"
+                @after-enter="afterEnter"
+                :css="false"
                 >
-                        <li v-for='(todo, index) in filteredTodos' :key='todo.id' class='todo-item'       
+                        <li v-for='(todo, index) in filteredTodos' 
+                        :key='todo.id' 
+                        class='todo-item'       
                         @dragenter="dragenter($event, index)"
                         @dragover="dragover($event, index)"
                         @dragstart="dragstart(index)"
+                        :data-delay="index * 100"
+                        v-show="show"
                         draggable
                         >          
                             <div class="todo-content" :class='{completed:todo.completed}' @dblclick="editdTodo(todo)">{{todo.title}}</div>
@@ -73,8 +81,11 @@
                                 <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNS4wOTkzIDE3Ljc1OTdDMTUuNzk0OSAxOC4yMDk4IDE2LjcyMzUgMTguMDEwOCAxNy4xNzM2IDE3LjMxNTJDMTcuNjIzNiAxNi42MTk3IDE3LjQyNDYgMTUuNjkxMSAxNi43MjkxIDE1LjI0MUMxMy4zMDc5IDEzLjAyNzMgMTAuODIwOSAxMC45OTU5IDguOTIyNTEgOS4wMzczOUM5LjA5NzQyIDguODQ5ODIgOS4yNzI5MSA4LjY2NTcxIDkuNDQ4ODggOC40ODUzNEMxMS44ODY0IDUuOTg2OTIgMTQuMjQ3MiA0LjM4MDY2IDE2LjI5NDQgMy45NzEyMkMxNy4xMDY3IDMuODA4NzUgMTcuNjMzNSAzLjAxODUyIDE3LjQ3MTEgMi4yMDYxOEMxNy4zMDg2IDEuMzkzODQgMTYuNTE4NCAwLjg2NzAxMyAxNS43MDYgMS4wMjk0OEMxMi43NTMyIDEuNjIwMDUgOS44NjQwNiAzLjc2Mzc5IDcuMzAxNTQgNi4zOTAzN0M3LjE4MTUxIDYuNTEzNCA3LjA2MTgxIDYuNjM3ODkgNi45NDI0OSA2Ljc2Mzc1QzUuNDIwMDEgNC44MDQzMyA0LjM3MDU4IDIuODc2MzIgMy40MjU5MSAwLjg2MzE2NEMzLjA3Mzk5IDAuMTEzMjAyIDIuMTgwNzMgLTAuMjA5NDc1IDEuNDMwNzcgMC4xNDI0NDVDMC42ODA4MDkgMC40OTQzNjUgMC4zNTgxMzIgMS4zODc2MiAwLjcxMDA1MSAyLjEzNzU4QzEuODIwODggNC41MDQ4MSAzLjA3ODk5IDYuNzY1MTEgNC45MjkzMiA5LjA1MzA2QzMuMjIyMDYgMTEuMTM0MSAxLjYyNjY5IDEzLjQzMjggMC4yMjI3MjMgMTUuNzE0MkMtMC4yMTE0NTMgMTYuNDE5NyAwLjAwODUyNzUyIDE3LjM0MzcgMC43MTQwNjQgMTcuNzc3OEMxLjQxOTYgMTguMjEyIDIuMzQzNTIgMTcuOTkyIDIuNzc3NyAxNy4yODY1QzQuMDQ4MTkgMTUuMjIyIDUuNDY0MDUgMTMuMTcyNiA2Ljk1NTU5IDExLjMxNjhDOC45ODUgMTMuMzc2NSAxMS41OTU5IDE1LjQ5MjggMTUuMDk5MyAxNy43NTk3WiIgZmlsbD0iIzMzMzIyRSIvPgo8L3N2Zz4K" alt=""> 
                             </div>
                             <!-- 编辑 -->
-                            <input type="text" class="edit-todo" value="编辑 Todo..." v-if="editedTodo !== null && editedTodo.id === todo.id"
+                            <div  class="edit-todo-wrapper"  v-if="editedTodo !== null && editedTodo.id === todo.id">
+                                <input type="text" class="edit-todo" value="编辑 Todo..." v-if="editedTodo !== null && editedTodo.id === todo.id"
                                 v-model="todo.title" v-focus="true" @keyup.enter="editDone(todo)" @keyup.esc="cancelEdit(todo)" />
+                                <input class="todo-btn btn-edit-submit" type="button" value="提交"  @click="editDone(todo)"/>
+                            </div>
                         </li>
                 </transition-group>
 
@@ -120,31 +131,6 @@
         </div>
         <!-- end todo list -->
 
-        <!-- <div class="footer container">
-            <div class="todo-footer-box">
-                <div class="filter">
-                    <span  v-if="todos.length || recycleBin.length">筛选：</span>
-                         <input type="button" value="撤销" v-if="hasRemovedTodo" @click="restoreTodo()">
-                        <input type="button" value="全部" :class="{selected: intention === 'all'}" @click="intention ='all'">
-                        <input type="button" value="进行中" v-if="leftTodosCount" :class="{selected: intention === 'ongoing'}"
-                            @click="intention ='ongoing'">
-                        <input type="button" value="已完成" v-if="completedTodosCount"
-                            :class="{selected: intention === 'completed'}" @click="intention='completed'">>
-                        <input type="button" v-if="leftTodosCount" value="全部标为已完成" @click="markAllAsCompleted">
-
-                        <input type="button" value="清除已完成" v-if="completedTodosCount" @click="clearCompleted">
-                        <input type="button" value="清除全部" @click="clearAll">
-                        <input type="button"
-                        v-if="recycleBin.length"
-                        value="回收站"
-                        @click="intention='removed'"/>
-                </div>
-            </div>
-        </div> -->
-
-
-
-
     </div>
 </div>
     <script>
@@ -180,6 +166,7 @@
                     recycleBin:[],
                     dragIndex: '',
                     enterIndex: '',
+                    show: true,
                 }
             },
             // 监测 todos 列表的变化，将变化存储到 local storage
@@ -289,6 +276,30 @@
                 dragover: function (e, index) {
                     e.preventDefault();
                 },
+                // JS钩子 加载动画
+
+                beforeEnter (dom) {
+                    dom.classList.add('drag-enter-active');
+                },
+                enter (dom, done) {
+                    let delay = dom.dataset.delay;
+                    setTimeout(() => {
+                        dom.classList.remove('drag-enter-active');
+                        dom.classList.add('drag-enter-to');
+                        let transitionend = window.ontransitionend ? "transitionend" : "webkitTransitionEnd";
+                        dom.addEventListener(transitionend, function onEnd () {
+                            dom.removeEventListener(transitionend, onEnd);
+                            done(); //调用done() 告诉vue动画已完成，以触发 afterEnter 钩子
+                        })
+
+                    }, delay);
+                },
+                afterEnter (dom) {
+                    dom.classList.remove('drag-enter-to');
+                }
+            },
+            mounted () {
+                this.show = true;
             },
             directives: {
                 focus: {
