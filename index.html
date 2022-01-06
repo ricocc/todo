@@ -42,14 +42,17 @@
                         <input type="button" class="btn btn-label btn-allFinish" value="全部标为完成"
                             @click="markAllAsCompleted" v-if="todos.length || recycleBin.length" />
                         <div class="bar-message-text">
-                            😄😄 今日事，今日毕!!
+                            😀😀 今日事，今日毕!!
                         </div>
+                    </div>
+                    <div class="no-info" v-if="!todos.length && !recycleBin.length">
+                           <span> 添加你的代办事项吧！</span>
                     </div>
                     <transition-group name="drag" class="todo-list" tag="ul" mode="in-out" @before-enter="beforeEnter"
                         @enter="enter" @after-enter="afterEnter" :css="false">
                         <li v-for='(todo, index) in filteredTodos' :key='todo.id' class='todo-item'
                             @dragenter="dragenter($event, index)" @dragover="dragover($event, index)"
-                            @dragstart="dragstart(index)" :data-delay="index * 100" v-show="show" draggable>
+                            @dragstart="dragstart(index)" :data-delay="150" v-show="show" draggable>
                             <div class="todo-content" :class='{completed:todo.completed}' @dblclick="editdTodo(todo)">
                                 {{todo.title}}</div>
                             <!-- 标记完成 -->
@@ -192,7 +195,6 @@
                     });
                     this.newTodoTitle = '';
                     this.checkEmpty = false;
-
                 },
                 markAsCompleted: function (todo) {
                     todo.completed = true;
@@ -272,15 +274,15 @@
                 },
                 dragover: function (e, index) {
                     e.preventDefault();
+
                 },
                 // JS钩子 加载动画
-
-                beforeEnter(dom) {
+                beforeEnter: function(dom) {
                     dom.classList.add('drag-enter-active');
                 },
-                enter(dom, done) {
+                enter: function(dom, done) {
                     let delay = dom.dataset.delay;
-                    setTimeout(() => {
+                    setTimeout(function(){
                         dom.classList.remove('drag-enter-active');
                         dom.classList.add('drag-enter-to');
                         let transitionend = window.ontransitionend ? "transitionend" :
@@ -292,7 +294,7 @@
 
                     }, delay);
                 },
-                afterEnter(dom) {
+                afterEnter: function (dom) {
                     dom.classList.remove('drag-enter-to');
                 }
             },
