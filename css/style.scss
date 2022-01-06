@@ -1,19 +1,20 @@
-$breakpoints: (
-  'xs': 'only screen and  (max-width: 350px)',
-  'sm': 'only screen and  (max-width: 640px)',
-  'md': 'only screen and ( max-width: 768px)',
-  'lg': 'only screen and ( max-width: 992px)'
+$breakpoints: ('xs': 'only screen and  (max-width: 350px)',
+    'sm': 'only screen and  (max-width: 640px)',
+    'md': 'only screen and ( max-width: 768px)',
+    'lg': 'only screen and ( max-width: 992px)'
 ) !default;
+
 @mixin respond-to($breakpoint) {
     $query: map-get($breakpoints, $breakpoint);
-    
+
     @if not $query {
-      @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.';
+        @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.';
     }
+
     @media #{if(type-of($query) == 'string', unquote($query), inspect($query))} {
-      @content;
+        @content;
     }
-  }
+}
 
 :root {
     --body-bg: #e8f6ff;
@@ -31,13 +32,13 @@ $breakpoints: (
     --font-color-complete: rgba(51, 50, 46, 0.535);
     //bg color 
     --bg-normal: #F9F3E5;
-    --bg-submit:#ffd6e9;
+    --bg-submit: #ffd6e9;
     --bg-completed: #D0F4F0;
     --bg-discard: #FFF0EE;
     --bg-deleted: #ddd;
     // --bg-edit:#e8fde6;
     --bg-edit: #fbeef3;
-   
+
     //dark color
     --normal: #f5d99e;
     --completed: #8CD4CB;
@@ -62,20 +63,31 @@ $breakpoints: (
 
 //basic css 
 html {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+
+    /* IE 10+ */
     ::-webkit-scrollbar {
-        display: none; /* Chrome Safari */
-      }
+        display: none;
+        /* Chrome Safari */
+    }
+
     background: #fff;
     font-size: 16px;
     background: var(--body-bg);
     font-size: var(--font-size-base);
     color: var(--font-color);
     box-sizing: border-box;
-    font-family: Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+    font-family: Arial,
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    "WenQuanYi Micro Hei",
+    sans-serif;
+
     @include respond-to('sm') {
-        font-family: "PingFang SC",miui,system-ui,-apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,sans-serif;
+        font-family: "PingFang SC", miui, system-ui, -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, sans-serif;
     }
 }
 
@@ -144,7 +156,13 @@ button:focus,
 input:focus {
     outline: none;
 }
-button,a,input{color:var(--font-color)}
+
+button,
+a,
+input {
+    color: var(--font-color)
+}
+
 ul,
 li {
     list-style-type: none;
@@ -193,6 +211,7 @@ h1 {
 .todo-wrapper {
     width: 100%;
     margin: 64px auto;
+
     @include respond-to('sm') {
         margin: 48px auto;
     }
@@ -213,6 +232,7 @@ h1 {
     padding: 32px 36px 36px;
     min-height: 381px;
     transition: all .5s ease;
+
     @include respond-to('sm') {
         padding: 24px 24px 18px;
         min-height: 280px;
@@ -222,6 +242,7 @@ h1 {
 .container {
     max-width: 640px;
     margin: 0 auto;
+
     @include respond-to('sm') {
         max-width: 92%;
     }
@@ -252,25 +273,28 @@ h1 {
 // }
 
 
-.drag-enter-active{
+.drag-enter-active {
     opacity: 0;
-  transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
+
 .drag-enter-to {
     opacity: 1;
     transform: translateY(-2px);
     transition: all 0.25s; //transition要写在此处
 }
 
-.drag-leave{
+.drag-leave {
     opacity: 0;
     transform: translateY(18px);
 }
-.drag-leave-active{
+
+.drag-leave-active {
     position: absolute;
     transition: all 0.5s ease;
 }
-  .drag-move{
+
+.drag-move {
     transition: all 0.65s ease;
 }
 
@@ -314,20 +338,23 @@ h1 {
 
 .add-content-wrapper {
     position: relative;
-    margin-bottom:24px;
+    margin-bottom: 24px;
 }
-.tips{
-    margin-top:8px;
-    padding-left:12px;
+
+.tips {
+    margin-top: 8px;
+    padding-left: 12px;
     transition: all 0.2s;
 }
-.edit-todo-wrapper{
+
+.edit-todo-wrapper {
     position: relative;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
 }
-.edit-todo{
+
+.edit-todo {
     padding: var(--padding);
     width: 100%;
     position: relative;
@@ -340,7 +367,7 @@ h1 {
     padding-right: 56px;
     -webkit-transition: all 0.25s;
     transition: all 0.25s;
-    border:0;
+    border: 0;
 }
 
 .submit-btn {
@@ -364,6 +391,7 @@ h1 {
     transition: all 0.25s;
     font-size: 18px;
 }
+
 .submit-btn:hover {
     box-shadow: none;
 }
@@ -403,7 +431,7 @@ h1 {
     padding-left: 56px;
     padding-right: 56px;
     cursor: pointer;
-    min-height:60px;
+    min-height: 60px;
 }
 
 .todo-btn {
@@ -421,7 +449,8 @@ h1 {
     transform: translate(-2px, -2px);
 
 }
-.btn-edit-submit{
+
+.btn-edit-submit {
     position: absolute;
     right: 12px;
     top: 14px;
@@ -438,6 +467,7 @@ h1 {
     justify-content: center;
     background: var(--bg-submit);
 }
+
 .btn-delete {
     background: #fff;
     right: 12px;
@@ -467,6 +497,7 @@ h1 {
     width: 30px;
     height: 30px;
     border-radius: 20px;
+
     &:hover {
         background: var(--completed);
         box-shadow: var(--box-shadow-reverse);
@@ -546,6 +577,7 @@ h1 {
 
 .todo-footer-box {
     position: relative;
+
     // background: #fff;
     // -webkit-box-shadow: var(--box-shadow);
     // box-shadow: var(--box-shadow);
@@ -568,10 +600,11 @@ h1 {
     padding-right: 0;
     font-size: 14px;
     padding: var(--btn-small-padding);
+
     @include respond-to('sm') {
-        margin:0;
+        margin: 0;
         display: block;
-        padding:12px 4px 0px;
+        padding: 12px 4px 0px;
     }
 }
 
@@ -579,10 +612,11 @@ h1 {
     cursor: pointer;
     margin: 0 12px;
     transition: all .25s;
+
     // border-right:var(--border);
     // display: inline-block;
     @include respond-to('sm') {
-        margin:8px 4px 4px;
+        margin: 8px 4px 4px;
         display: inline-block;
     }
 }
@@ -600,15 +634,16 @@ h1 {
     min-width: 80px;
     font-weight: 400;
     font-size: 1rem;
+
     @include respond-to('sm') {
         display: block;
-    
+
     }
 }
 
 .todo-func-list li:last-child {
     border: 0;
-    margin-right:0;
+    margin-right: 0;
 }
 
 .filter {
@@ -623,7 +658,7 @@ h1 {
     text-decoration: line-through;
 }
 
-.deleted{
+.deleted {
     background: var(--bg-deleted);
 }
 
@@ -668,12 +703,12 @@ h1 {
 .action-deleted:hover,
 .action-deleted.selected,
 .completed-clear:hover,
-.clear-all:hover{
+.clear-all:hover {
     background: var(--deleted);
 }
 
 //animation
-.animated{
+.animated {
     -webkit-animation-duration: .35s;
     animation-duration: .35s;
     -webkit-animation-fill-mode: both;
@@ -681,80 +716,84 @@ h1 {
     -webkit-animation-timing-function: ease-in-out;
     animation-timing-function: ease-in-out
 }
+
 .tips-enter-active {
     transition: all .75s ease;
 }
+
 .tips-leave-active {
-transition: all .35s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transition: all .35s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
-.tips-enter, .tips-leave-to{
-transform: translateX(8px);
-opacity: 0;
+
+.tips-enter,
+.tips-leave-to {
+    transform: translateX(8px);
+    opacity: 0;
 }
 
 
- 
+
 
 @-webkit-keyframes headShake {
     0% {
-      -webkit-transform: translateX(0);
-      transform: translateX(0)
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
     }
-  
+
     6.5% {
-      -webkit-transform: translateX(-6px) rotateY(-9deg);
-      transform: translateX(-6px) rotateY(-9deg)
+        -webkit-transform: translateX(-6px) rotateY(-9deg);
+        transform: translateX(-6px) rotateY(-9deg)
     }
-  
+
     18.5% {
-      -webkit-transform: translateX(5px) rotateY(7deg);
-      transform: translateX(5px) rotateY(7deg)
+        -webkit-transform: translateX(5px) rotateY(7deg);
+        transform: translateX(5px) rotateY(7deg)
     }
-  
+
     31.5% {
-      -webkit-transform: translateX(-3px) rotateY(-5deg);
-      transform: translateX(-3px) rotateY(-5deg)
+        -webkit-transform: translateX(-3px) rotateY(-5deg);
+        transform: translateX(-3px) rotateY(-5deg)
     }
-  
+
     43.5% {
-      -webkit-transform: translateX(2px) rotateY(3deg);
-      transform: translateX(2px) rotateY(3deg)
+        -webkit-transform: translateX(2px) rotateY(3deg);
+        transform: translateX(2px) rotateY(3deg)
     }
-  
+
     50% {
-      -webkit-transform: translateX(0);
-      transform: translateX(0)
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
     }
-  }
-  
-  @keyframes headShake {
+}
+
+@keyframes headShake {
     0% {
-      -webkit-transform: translateX(0);
-      transform: translateX(0)
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
     }
-  
+
     6.5% {
-      -webkit-transform: translateX(-6px) rotateY(-9deg);
-      transform: translateX(-6px) rotateY(-9deg)
+        -webkit-transform: translateX(-6px) rotateY(-9deg);
+        transform: translateX(-6px) rotateY(-9deg)
     }
-  
+
     18.5% {
-      -webkit-transform: translateX(5px) rotateY(7deg);
-      transform: translateX(5px) rotateY(7deg)
+        -webkit-transform: translateX(5px) rotateY(7deg);
+        transform: translateX(5px) rotateY(7deg)
     }
-  
+
     31.5% {
-      -webkit-transform: translateX(-3px) rotateY(-5deg);
-      transform: translateX(-3px) rotateY(-5deg)
+        -webkit-transform: translateX(-3px) rotateY(-5deg);
+        transform: translateX(-3px) rotateY(-5deg)
     }
-  
+
     43.5% {
-      -webkit-transform: translateX(2px) rotateY(3deg);
-      transform: translateX(2px) rotateY(3deg)
+        -webkit-transform: translateX(2px) rotateY(3deg);
+        transform: translateX(2px) rotateY(3deg)
     }
-  
+
     50% {
-      -webkit-transform: translateX(0);
-      transform: translateX(0)
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
     }
-  }
+}

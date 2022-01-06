@@ -1,12 +1,12 @@
 @charset "UTF-8";
-:root { --body-bg: #e8f6ff; --border-radius: 12px; --border: 2px solid #33322E; --box-shadow: 4px 4px 0px #33322E; --box-shadow-reverse: -4px 4px 0px #33322E; --padding: 20px 24px; --btn-padding: 12px 24px; --btn-small-padding: 8px 20px; --font-color: #33322E; --font-size-base: 16px; --placeholder: rgba(51, 50, 46, 0.535); --font-color-complete: rgba(51, 50, 46, 0.535); --bg-normal: #F9F3E5; --bg-submit:#ffd6e9; --bg-completed: #D0F4F0; --bg-discard: #FFF0EE; --bg-deleted: #ddd; --bg-edit: #fbeef3; --normal: #f5d99e; --completed: #8CD4CB; --deleted: #F6A89E; --black: #33322E; }
+:root { --body-bg: #e8f6ff; --border-radius: 12px; --border: 2px solid #33322E; --box-shadow: 4px 4px 0px #33322E; --box-shadow-reverse: -4px 4px 0px #33322E; --padding: 20px 24px; --btn-padding: 12px 24px; --btn-small-padding: 8px 20px; --font-color: #33322E; --font-size-base: 16px; --placeholder: rgba(51, 50, 46, 0.535); --font-color-complete: rgba(51, 50, 46, 0.535); --bg-normal: #F9F3E5; --bg-submit: #ffd6e9; --bg-completed: #D0F4F0; --bg-discard: #FFF0EE; --bg-deleted: #ddd; --bg-edit: #fbeef3; --normal: #f5d99e; --completed: #8CD4CB; --deleted: #F6A89E; --black: #33322E; }
 @media only screen and (max-width: 640px) { :root { --font-size-base: 16px; --padding: 16px 20px; --btn-padding: 12px 18px; --btn-small-padding: 10px 15px; } }
 
 * { margin: 0; padding: 0; -webkit-box-sizing: border-box; box-sizing: border-box; -webkit-transition: all 0.25s; transition: all 0.25s; }
 
-html { scrollbar-width: none; /* Firefox */ -ms-overflow-style: none; /* IE 10+ */ background: #fff; font-size: 16px; background: var(--body-bg); font-size: var(--font-size-base); color: var(--font-color); -webkit-box-sizing: border-box; box-sizing: border-box; font-family: Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif; }
+html { scrollbar-width: none; /* Firefox */ -ms-overflow-style: none; /* IE 10+ */ background: #fff; font-size: 16px; background: var(--body-bg); font-size: var(--font-size-base); color: var(--font-color); -webkit-box-sizing: border-box; box-sizing: border-box; font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif; }
 html ::-webkit-scrollbar { display: none; /* Chrome Safari */ }
-@media only screen and (max-width: 640px) { html { font-family: "PingFang SC",miui,system-ui,-apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,sans-serif; } }
+@media only screen and (max-width: 640px) { html { font-family: "PingFang SC", miui, system-ui, -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, sans-serif; } }
 
 /* - Chrome ≤56, - Safari 5-10.0 - iOS Safari 4.2-10.2 - Opera 15-43 - Opera Mobile >12 - Android Browser 2.1-4.4.4 - Samsung Internet - UC Browser for Android - QQ Browser */
 ::-webkit-input-placeholder { color: var(--placeholder); font-weight: 400; }
