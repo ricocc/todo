@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,7 +20,7 @@
     https://www.zmrenwu.com/courses/vue2x-todo-tutorial/ -->
     <div class="bg-pattern"></div>
     <div class="todo-wrapper">
-        <div id="todo-app" class="todo-app">
+        <div id="todo-app" class="todo-app" >
             <div class="header">
                 <div class="todo-input container">
                     <h1>TODO LIST</h1>
@@ -42,17 +43,24 @@
                         <input type="button" class="btn btn-label btn-allFinish" value="全部标为完成"
                             @click="markAllAsCompleted" v-if="todos.length || recycleBin.length" />
                         <div class="bar-message-text">
-                            😀😀 今日事，今日毕!!
+                            😄😄 今日事，今日毕!!
                         </div>
                     </div>
-                    <div class="no-info" v-if="!todos.length && !recycleBin.length">
-                           <span> 添加你的代办事项吧！</span>
+                                                                        
+                    <div v-if="!todos.length && !recycleBin.length">
+                        添加你的第一个代办事项！
                     </div>
+        
                     <transition-group name="drag" class="todo-list" tag="ul" mode="in-out" @before-enter="beforeEnter"
-                        @enter="enter" @after-enter="afterEnter" :css="false">
+                    @enter="enter" @after-enter="afterEnter" 
+                    :css="false"
+                    appear>
+
                         <li v-for='(todo, index) in filteredTodos' :key='todo.id' class='todo-item'
                             @dragenter="dragenter($event, index)" @dragover="dragover($event, index)"
-                            @dragstart="dragstart(index)" :data-delay="150" v-show="show" draggable>
+                            @dragstart="dragstart(index)" 
+                            :data-delay="index * 150 * delayTime"  
+                            v-show="show" draggable>
                             <div class="todo-content" :class='{completed:todo.completed}' @dblclick="editdTodo(todo)">
                                 {{todo.title}}</div>
                             <!-- 标记完成 -->
@@ -167,6 +175,7 @@
                     dragIndex: '',
                     enterIndex: '',
                     show: true,
+                    delayTime: '1',
                 }
             },
             // 监测 todos 列表的变化，将变化存储到 local storage
@@ -182,19 +191,23 @@
                 shuffle: function () {
                     this.filteredTodos = _.shuffle(this.filteredTodos);
                 },
-                addTodo: function () {
+                addTodo: function (e) {
                     if (this.newTodoTitle === '') {
                         this.checkEmpty = true;
                         return
+                    }else{
                     }
                     this.todos.push({
                         id: todoStorage.uid++,
                         title: this.newTodoTitle,
                         completed: false,
-                        removed: false
+                        removed: false,
                     });
                     this.newTodoTitle = '';
                     this.checkEmpty = false;
+                    this.delayTime = '0';
+                   
+
                 },
                 markAsCompleted: function (todo) {
                     todo.completed = true;
@@ -231,7 +244,6 @@
                     }
                 },
                 editDone: function (todo) {
-
                     if (todo.title === '') {
                         this.removeTodo(todo)
                     }
@@ -274,28 +286,28 @@
                 },
                 dragover: function (e, index) {
                     e.preventDefault();
-
                 },
                 // JS钩子 加载动画
-                beforeEnter: function(dom) {
+                beforeEnter(dom) {
                     dom.classList.add('drag-enter-active');
                 },
-                enter: function(dom, done) {
+                enter(dom, done) {
                     let delay = dom.dataset.delay;
-                    setTimeout(function(){
+                    setTimeout(() => {
+                        this.delayTime = '1';
                         dom.classList.remove('drag-enter-active');
                         dom.classList.add('drag-enter-to');
-                        let transitionend = window.ontransitionend ? "transitionend" :
-                            "webkitTransitionEnd";
+                        let transitionend = window.ontransitionend ? "transitionend" :"webkitTransitionEnd";
                         dom.addEventListener(transitionend, function onEnd() {
                             dom.removeEventListener(transitionend, onEnd);
-                            done(); //调用done() 告诉vue动画已完成，以触发 afterEnter 钩子
+                            done(); 
+                            //调用done() 告诉vue动画已完成，以触发 afterEnter 钩子
                         })
-
                     }, delay);
                 },
-                afterEnter: function (dom) {
+                afterEnter(dom) {
                     dom.classList.remove('drag-enter-to');
+                   
                 }
             },
             mounted() {
@@ -343,7 +355,6 @@
                         return this.todos
                     }
                 },
-
             },
         })
     </script>

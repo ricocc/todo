@@ -58,7 +58,7 @@ $breakpoints: ('xs': 'only screen and  (max-width: 350px)',
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: all 0.25s;
+    transition: all 0.35s;
 }
 
 //basic css 
@@ -280,8 +280,8 @@ h1 {
 
 .drag-enter-to {
     opacity: 1;
-    transform: translateY(0px);
-    transition: all 0.25s; //transition要写在此处
+    transform: translateY(0);
+    transition: all 0.5s; //transition要写在此处
 }
 
 .drag-leave {
@@ -291,7 +291,7 @@ h1 {
 
 .drag-leave-active {
     position: absolute;
-    transition: all 0.5s ease;
+    transition: all 0.35s ease;
 }
 
 .drag-move {
@@ -724,14 +724,14 @@ h1 {
 .tips-leave-active {
     transition: all .35s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
-.tips-enter-before{
-    opacity: 0;
-}
+
 .tips-enter,
 .tips-leave-to {
     transform: translateX(8px);
     opacity: 0;
 }
+
+
 
 
 @-webkit-keyframes headShake {
