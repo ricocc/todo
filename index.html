@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue Todo</title>
+    <title>Todo List 网页版待办事项</title>
     <link type="favicon" rel="shortcut icon" href="img/favicon.png" />
     <link href="css/normalize.css" rel="stylesheet" media="screen">
     <link href="css/style.css" rel="stylesheet" media="screen">
     <link href="css/style.scss" rel="stylesheet" media="screen">
     <!-- Vue 2.x  Todo List   -->
-    <!-- <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script> -->
     <script src="js/vue.js"></script>
 </head>
 
@@ -21,9 +21,9 @@
     <div class="bg-pattern"></div>
     <div class="todo-wrapper">
         <div id="todo-app" class="todo-app" >
-            <div class="header">
-                <div class="todo-input container">
-                    <h1>TODO LIST</h1>
+            <div class="container header ">
+                <div class="todo-input">
+                    <h1 class="title">TODO</h1>
                     <div class="add-content-wrapper">
                         <input type="text" rows="3" class="add-content" placeholder="新增待办事项..." v-model="newTodoTitle"
                             @keyup.enter="addTodo" :class='{empty:emptyChecked}' />
@@ -37,19 +37,26 @@
             </div>
 
             <!-- todo list -->
-            <div class="main container">
+            <div class="container main">
                 <div class="todo-list-box">
                     <div class="bar-message">
                         <input type="button" class="btn btn-label btn-allFinish" value="全部标为完成"
                             @click="markAllAsCompleted" v-if="todos.length || recycleBin.length" />
                         <div class="bar-message-text">
-                            😄😄 今日事，今日毕!!
+                             今日事今日毕，勿将今事待明日! 🤏🤏
                         </div>
                     </div>
                                                                         
-                    <div v-if="!todos.length && !recycleBin.length">
-                        添加你的第一个代办事项！
-                    </div>
+                    <ul v-if="!todos.length && recycleBin.length" class="empty-tips">
+                        <li> 添加你的第一个代办事项！📝</li> 
+                        <li>食用方法💡：</li>
+                        <li>✔️ 所有提交操作支持Enter回车键提交~</li>
+                        <li>✔️ 拖拽Todo上下移动可重新排序~</li>
+                        <li>✔️ 双击已有的Todo可进行编辑~</li>
+                        <li>✔️ 右侧是快捷操作小窗口哦!</li>
+                        <li>🔒 所有的Todo数据存储在浏览器本地，删除缓存则数据消失</li>
+
+                    </ul>
         
                     <transition-group name="drag" class="todo-list" tag="ul" mode="in-out" @before-enter="beforeEnter"
                     @enter="enter" @after-enter="afterEnter" 
@@ -101,51 +108,59 @@
                     </div>
                 </div> -->
                 </div>
+
+                <div class="footer side-bar" >
+                    <div class="side-shortcut" @click="shortCutAction()" :class="{fold: isShow}">
+                        <div class="shortcut-switch">
+                           <span class="shortcut-title">{{shortCut}}</span>
+                           <span class="shortcut-name">快捷操作</span>
+                        </div>
+                        
+                    </div>
+                    <div class="todo-footer-box">
+                        <ul class="todo-func-list filter">
+                            <!-- <li v-if="todos.length || recycleBin.length">筛选：</li> -->
+                            <!-- <li v-if="hasRemovedTodo" ><input type="button" value="撤销" v-if="hasRemovedTodo" @click="restoreTodo()"></li> -->
+                            <li > <input class="btn-small action-showAll"
+                                    type="button" value="全部" :class="{selected: intention === 'all'}"
+                                    @click="intention ='all'"></li>
+                            <li v-if="completedTodosCount"><input class="btn-small action-progress" type="button"
+                                    value="进行中" v-if="leftTodosCount" :class="{selected: intention === 'ongoing'}"
+                                    @click="intention ='ongoing'"></li>
+                            <li v-if="completedTodosCount">
+                                <input class="btn-small action-completed" type="button" value="已完成"
+                                    v-if="completedTodosCount" :class="{selected: intention === 'completed'}"
+                                    @click="intention='completed'">
+                            </li>
+                            <li v-if="recycleBin.length">
+                                <input class="btn-small action-deleted" type="button" v-if="recycleBin.length"
+                                    :class="{selected: intention === 'removed'}" value="回收站" @click="intention='removed'" />
+                            </li>
+                        </ul>
+                        <ul class="todo-func-list batch">
+                            <!-- <li v-if="todos.length">批量操作：</li> -->
+                            <li v-if="leftTodosCount"> <input type="button" class="btn-small completed-all"
+                                    v-if="leftTodosCount" value="全部标为已完成" @click="markAllAsCompleted"> </li>
+                            <li v-if="completedTodosCount"> <input type="button" value="清除已完成"
+                                    class="btn-small completed-clear" v-if="completedTodosCount" @click="clearCompleted">
+                            </li>
+                            <li v-if="todos.length"><input type="button" class="btn-small clear-all" value="清除全部"
+                                    @click="clearAll"> </li>
+                        </ul>
+
+                    </div>
+
+                </div>
             </div>
 
             <br>
 
-            <div class="footer container">
-                <div class="todo-footer-box">
-                    <ul class="todo-func-list filter">
-                        <li v-if="todos.length || recycleBin.length">筛选：</li>
-                        <!-- <li v-if="hasRemovedTodo" ><input type="button" value="撤销" v-if="hasRemovedTodo" @click="restoreTodo()"></li> -->
-                        <li v-if="todos.length || recycleBin.length"> <input class="btn-small action-showAll"
-                                type="button" value="全部" :class="{selected: intention === 'all'}"
-                                @click="intention ='all'"></li>
-                        <li v-if="completedTodosCount"><input class="btn-small action-progress" type="button"
-                                value="进行中" v-if="leftTodosCount" :class="{selected: intention === 'ongoing'}"
-                                @click="intention ='ongoing'"></li>
-                        <li v-if="completedTodosCount">
-                            <input class="btn-small action-completed" type="button" value="已完成"
-                                v-if="completedTodosCount" :class="{selected: intention === 'completed'}"
-                                @click="intention='completed'">
-                        </li>
-                        <li v-if="recycleBin.length">
-                            <input class="btn-small action-deleted" type="button" v-if="recycleBin.length"
-                                :class="{selected: intention === 'removed'}" value="回收站" @click="intention='removed'" />
-                        </li>
-                    </ul>
-                    <ul class="todo-func-list batch">
-                        <li v-if="todos.length">批量操作：</li>
-                        <li v-if="leftTodosCount"> <input type="button" class="btn-small completed-all"
-                                v-if="leftTodosCount" value="全部标为已完成" @click="markAllAsCompleted"> </li>
-                        <li v-if="completedTodosCount"> <input type="button" value="清除已完成"
-                                class="btn-small completed-clear" v-if="completedTodosCount" @click="clearCompleted">
-                        </li>
-                        <li v-if="todos.length"><input type="button" class="btn-small clear-all" value="清除全部"
-                                @click="clearAll"> </li>
-                    </ul>
-
-                </div>
-            </div>
             <!-- end todo list -->
 
         </div>
     </div>
     <script>
         // localStorage 存储数据
-
         var STORAGE_KEY = 'vue2.x-todo-tutorial';
         var todoStorage = {
             fetch: function () {
@@ -178,6 +193,8 @@
                     enterIndex: '',
                     show: true,
                     delayTime: '1',
+                    isShow: false,
+                    shortCut:'开✨',
                 }
             },
             // 监测 todos 列表的变化，将变化存储到 local storage
@@ -190,6 +207,15 @@
                 }
             },
             methods: {
+                shortCutAction: function(){
+                    this.isShow = !this.isShow;
+                    if(this.isShow){
+                        return this.shortCut = '关'
+                    }else{
+                        return this.shortCut = '开✨'
+                    }
+
+                },
                 shuffle: function () {
                     this.filteredTodos = _.shuffle(this.filteredTodos);
                 },
