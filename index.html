@@ -23,7 +23,29 @@
         <div id="todo-app" class="todo-app" >
             <div class="container header ">
                 <div class="todo-input">
-                    <h1 class="title">TODO</h1>
+                    <h1 class="title">
+                        <img src="img/todo.svg" alt="" class="title-1">
+                        <div class="ani-vector">
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="pendulums">
+                            <div class="pendulum">
+                                <div class="bar"></div>
+                                <div class="motion">
+                                <div class="string"></div>
+                                <div class="weight"></div>
+                                </div>
+                            </div>
+                            <div class="pendulum shadow">
+                                <div class="bar"></div>
+                                <div class="motion">
+                                <div class="string"></div>
+                                <div class="weight"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </h1>
                     <div class="add-content-wrapper">
                         <input type="text" rows="3" class="add-content" placeholder="新增待办事项..." v-model="newTodoTitle"
                             @keyup.enter="addTodo" :class='{empty:emptyChecked}' />
@@ -47,7 +69,7 @@
                         </div>
                     </div>
                                                                         
-                    <ul v-if="!todos.length && recycleBin.length" class="empty-tips">
+                    <ul v-if="!todos.length" class="empty-tips">
                         <li> 添加你的第一个代办事项！📝</li> 
                         <li>食用方法💡：</li>
                         <li>✔️ 所有提交操作支持Enter回车键提交~</li>

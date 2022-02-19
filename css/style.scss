@@ -1,5 +1,5 @@
 $breakpoints: ('xs': 'only screen and  (max-width: 350px)',
-    'sm': 'only screen and  (max-width: 640px)',
+    'sm': 'only screen and  (max-width: 700px)',
     'md': 'only screen and ( max-width: 768px)',
     'lg': 'only screen and ( max-width: 992px)'
 ) !default;
@@ -191,7 +191,7 @@ h1 {
     border: 2px solid var(--black);
 }
 .container {
-    max-width: 640px;
+    max-width: 700px;
     margin: 0 auto;
 
     @include respond-to('sm') {
@@ -263,13 +263,52 @@ h1 {
 
 
 .title{
+    position: relative;
     font-weight: 800;
     -webkit-text-stroke: 2px var(--black);
     color:var(--bg-normal);
     text-shadow: 4px 4px 0 var(--font-color);
     letter-spacing: 2px;
     font-size: 44px;
-    margin:0 auto 18px;
+    margin:0 auto 12px;
+    width: 200px;
+}
+.title{
+    img{
+     display: inline-block;
+     width: auto;
+     height: 52px;
+     padding:0;  
+    }
+
+}
+.ani-vector{
+    position: absolute;
+    left:-60px;
+    top:4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span{
+        transform:rotateZ(45deg);
+        margin:0 7px;
+        width: 10px;
+        height: 10px;
+        border:2px solid var(--black);
+        background-color: var(--bg-submit);
+        display: inline-block;
+        border-radius: 1px;
+        animation: zooming 8s ease-in-out infinite;
+        &:first-child{
+
+        }
+        &:nth-child(2){
+                animation-delay: 2s;
+        }
+        &:nth-child(3){
+                animation-delay: 2s;
+         }
+    }
 }
 
 .todo-list li {
@@ -427,6 +466,7 @@ h1 {
     top: 2px;
     border: 0;
     border-left: var(--border);
+    border-radius: 10px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     cursor: pointer;
@@ -826,6 +866,117 @@ span.shortcut-name{
     background: var(--deleted);
 }
 
+#panda{
+    position:absolute;
+    width:200px;
+    height:200px;
+    right:-72px;
+    bottom:-2px;
+}
+//pendulums
+
+.pendulums{
+    position:absolute;
+    width:50px;
+    height:72px;
+    right:-58px;
+    bottom:-2px;
+    perspective:640px;
+  }
+  
+  .pendulum{
+    position:absolute;
+    width:50px;
+    height:70px;
+    right:44%;
+    bottom:0;
+    left:50%;
+    transform: translateZ(-300px) translateX(-50%);
+    &:after{
+        content:"";
+        width: 8px;
+        height: 8px;
+        background-color: var(--bg-submit);
+        position: absolute;
+        top:2px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        transform: rotate(45deg);
+        border: 3px solid var(--black);
+    }
+  }
+  
+  .pendulum.shadow{
+      display: none;
+    top:263%;
+    left:-65%;
+    bottom:0;
+    transform-origin: 50% 0;
+  transform:translateX(-50%) scaleY(-1) scaleZ(2) rotateY(-30deg) rotateX(-75deg) translateZ(300px);
+  }
+  
+  .pendulum .bar{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    top:-5px;
+    display:block;
+    width: 26px;
+    height:30px;
+    background:#d0f4f0;
+    border:3px solid #33322E;
+    border-radius: 15px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+  }
+  
+  .pendulum .string{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    width:3px;
+    height:72px;
+    background:var(--black);
+  }
+  
+  .pendulum .weight{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:14px;
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:#f8d966;
+    border:3px solid #33322E;
+  }
+  
+  .pendulum .motion{
+    position:absolute;
+    height:90px;
+    width:50px;
+    transform-origin:50% 10px;
+    animation: swing 1800ms infinite ease-in-out;
+  }
+  
+  .pendulum.shadow .bar, .pendulum.shadow .string, .pendulum.shadow .weight{
+    background:#3d3a34;
+  }
+  @keyframes swing{
+    0%{    
+    transform:rotate(-45deg);
+    }
+    50%{
+      
+    transform:rotate(45deg);
+    }
+    100%{
+      
+    transform:rotate(-45deg);
+    }
+  }
+//End Pendulums
 //animation
 .animated {
     -webkit-animation-duration: .35s;
@@ -914,5 +1065,34 @@ span.shortcut-name{
     50% {
         -webkit-transform: translateX(0);
         transform: translateX(0)
+    }
+}
+
+.zooming{
+    animation: zooming 1.5s ease-in-out infinite;
+}
+@keyframes zooming {
+    0% {
+        transform: scale(1) rotateZ(45deg);
+    }
+
+    20% {
+        transform: scale(1) rotateZ(45deg);
+    }
+
+    30% {
+        transform: scale(1) rotateZ(135deg);
+    }
+
+    70% {
+        transform: scale(1) rotateZ(135deg);
+    }
+
+    80% {
+        transform: scale(1) rotateZ(45deg);
+    }
+    
+    100% {
+        transform: scale(1) rotateZ(45deg);
     }
 }
