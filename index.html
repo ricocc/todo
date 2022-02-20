@@ -5,19 +5,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List 网页版待办事项</title>
+    <title>Todo List 极简设计的网页版Todo-By Rico</title>
+    <meta name="keywords" content="在线Todo,网页todo,备忘录, ,无需注册登陆,即开即用,便签, 提醒, 日程, 记事本, 记事, 待办事件,online todolist" />
+    <meta name="description" content="一款优秀的设计简洁的todolist网页版本应用,无需注册,数据存储在H5浏览器本地缓存.技术基于Vue2.x,提供工作和生活辅助！" />
     <link type="favicon" rel="shortcut icon" href="img/favicon.png" />
     <link href="css/normalize.css" rel="stylesheet" media="screen">
-    <link href="css/style.css" rel="stylesheet" media="screen">
-    <link href="css/style.scss" rel="stylesheet" media="screen">
+    <link href="css/style.min.css" rel="stylesheet" media="screen">
+    <!-- <link href="css/style.scss" rel="stylesheet" media="screen"> -->
     <!-- Vue 2.x  Todo List   -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script> -->
     <script src="js/vue.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R0CHPCY5WE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-R0CHPCY5WE');
+    </script>
 </head>
 
 <body>
-    <!-- Vue 2.x Todo 教程
-    https://www.zmrenwu.com/courses/vue2x-todo-tutorial/ -->
     <div class="bg-pattern"></div>
     <div class="todo-wrapper">
         <div id="todo-app" class="todo-app" >
@@ -73,10 +81,10 @@
                         <li> 添加你的第一个代办事项！📝</li> 
                         <li>食用方法💡：</li>
                         <li>✔️ 所有提交操作支持Enter回车键提交~</li>
-                        <li>✔️ 拖拽Todo上下移动可重新排序~</li>
+                        <li>✔️ 拖拽Todo上下移动可排序(仅支持PC)~</li>
                         <li>✔️ 双击已有的Todo可进行编辑~</li>
-                        <li>✔️ 右侧是快捷操作小窗口哦!</li>
-                        <li>🔒 所有的Todo数据存储在浏览器本地，删除缓存则数据消失</li>
+                        <li>✔️ 右侧的小窗口是快捷操作哦~</li>
+                        <li>🔒 所有的Todo数据存储在浏览器本地~</li>
 
                     </ul>
         
@@ -178,9 +186,14 @@
             <br>
 
             <!-- end todo list -->
-
+            <div class="wechat">
+                <div class="wechat-ico" @click="togglePop"><img src="img/wechat.svg" alt="微信" ></div>
+                <i class="qrcode animated popIn" v-if="!popShow"><img src="img/wechat_qrcode.jpg" alt=""></i>
+            </div>
         </div>
     </div>
+
+
     <script>
         // localStorage 存储数据
         var STORAGE_KEY = 'vue2.x-todo-tutorial';
@@ -200,7 +213,6 @@
     </script>
 
     <script>
-        let id = 0;
         var app = new Vue({
             el: '#todo-app',
             data: function () {
@@ -217,10 +229,16 @@
                     delayTime: '1',
                     isShow: false,
                     shortCut:'开✨',
+                    popShow:true,
+                    windowWidth: document.documentElement.clientWidth, 
                 }
             },
             // 监测 todos 列表的变化，将变化存储到 local storage
             watch: {
+                windowWidth (val) {
+                    let that = this;
+                    console.log("实时屏幕宽度：",val);
+                },
                 todos: {
                     handler: function (todos) {
                         todoStorage.sava(todos)
@@ -229,6 +247,15 @@
                 }
             },
             methods: {
+                contorlScreen:function(){
+                    if(this.windowWidth < 768){
+                        this.isShow = !this.isShow;
+                        return this.shortCut = '筛选'
+                    }
+                },
+                togglePop: function(){
+                this.popShow = !this.popShow;//取反
+                },
                 shortCutAction: function(){
                     this.isShow = !this.isShow;
                     if(this.isShow){
@@ -362,6 +389,15 @@
             },
             mounted() {
                 this.show = true;
+                var that = this;
+                this.contorlScreen();
+                   // <!--把window.onresize事件挂在到mounted函数上-->
+                window.onresize = () => {
+                    return (() => {
+                    window.fullWidth = document.documentElement.clientWidth;
+                    that.windowWidth = window.fullWidth; // 宽
+                    })()
+                };
             },
             directives: {
                 focus: {
